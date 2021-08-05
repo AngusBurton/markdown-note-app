@@ -6,6 +6,7 @@ const isDev = require("electron-is-dev");
 require("@electron/remote/main").initialize();
 
 const fs = require("fs");
+const { resolve } = require("path");
 
 function createWindow() {
   // Create the browser window.
@@ -26,48 +27,7 @@ function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
-
-  ipcMain.on("file", (event, data) => {
-    console.log(openFile(win));
-    // console.log(data);
-    const content = "sugma nuts";
-    event.reply("reply", content);
-  });
-
-  function openFile(win) {
-    const files = dialog.showOpenDialogSync(win, {
-      properties: ["openFile"],
-      filters: [
-        {
-          name: "Markdown",
-          extensions: ["md", "markdown", "txt"],
-        },
-      ],
-    });
-    if (!files) {
-      return;
-    } else {
-      const fileContent = fs.readFileSync(files[0]).toString;
-      return fileContent;
-    }
-  }
 }
-
-//====================================================
-
-// ipcMain.on("READ_FILE", (event, payload) => {
-//   if (fs.existsSync("./dummy.txt")) {
-//     const content = fs.readFileSync("./dummy.txt", {
-//       encoding: "utf8",
-//       flag: "r",
-//     });
-//     event.reply("READ_FILE", content);
-//   } else {
-//     event.reply("READ_FILE", "");
-//   }
-// });
-
-//====================================================
 
 app.on("ready", createWindow);
 
@@ -84,4 +44,56 @@ app.on("activate", function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
+});
+
+// =========================================================== //
+
+const currentWindow = BrowserWindow.getAllWindows()[0];
+let currentFilePath = "";
+
+function getCurrentFile(win) {
+  dialog
+    .showOpenDialog(win, {
+      properties: ["openFile"],
+      filters: [
+        {
+          name: "Markdown",
+          extensions: ["md", "markdown", "txt"],
+        },
+      ],
+    })
+    .then((result) => {
+      if (result.canceled) {
+        console.log(result.canceled);
+      } else {
+        currentFilePath = result.filePaths[0];
+        openFile(currentFilePath, arguments[2]);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function openFile(path, e) {
+  fs.readFile(path, "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    // Send text from file back to editor
+    e.reply("reply", data);
+  });
+}
+
+ipcMain.on("file", (event, data) => {
+  getCurrentFile(currentWindow, openFile, event);
+});
+
+ipcMain.on("save", (event, data) => {
+  console.log("saved - " + currentFilePath);
+  // fs.writeFile(, data, function (err) {
+  //   if (err) return console.log(err);
+  //   console.log("hit");
+  // });
 });

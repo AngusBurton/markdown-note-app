@@ -6,10 +6,6 @@ import React from "react";
 
 const { ipcRenderer } = window.require("electron");
 
-ipcRenderer.on("reply", (event, data) => {
-  console.log(data);
-});
-
 const GetFileBtn = () => {
   return (
     <button
