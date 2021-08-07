@@ -18,7 +18,7 @@ export default function TreeList() {
     <div>
       {treeList.map((item, index) =>
         item.type === "file" ? (
-          <TreeFile key={index} name={item.name} />
+          <TreeFile key={index} name={item.name} path={item.path} />
         ) : (
           <TreeFolder key={index} name={item.name} />
         )

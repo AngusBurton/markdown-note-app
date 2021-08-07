@@ -48,27 +48,22 @@ app.on("activate", function () {
 // =========================================================== //
 
 const currentWindow = BrowserWindow.getAllWindows()[0];
+let currentFolderPath = "";
 let currentFilePath = "";
 
-function getCurrentFile(win) {
+function getCurrentFolder(win) {
   dialog
     .showOpenDialog(win, {
       properties: ["openDirectory"],
-      // filters: [
-      //   {
-      //     name: "Markdown",
-      //     extensions: ["md", "markdown", "txt"],
-      //   },
-      // ],
     })
     .then((result) => {
       if (result.canceled) {
         console.log(result.canceled);
       } else {
-        currentFilePath = result.filePaths[0];
+        currentFolderPath = result.filePaths[0];
         // Calling openfile on init when no file is selected ***need to fix
         // readFile(currentFilePath, arguments[2]);
-        folderContent(currentFilePath, arguments[2]);
+        folderContent(currentFolderPath, arguments[2]);
       }
     })
     .catch((err) => {
@@ -96,9 +91,14 @@ function readFile(path, e) {
   });
 }
 
-ipcMain.on("get-file", (event, data) => {
+ipcMain.on("get-folder", (event, data) => {
   // getCurrentFile(currentWindow, readFile, event);
-  getCurrentFile(currentWindow, folderContent, event);
+  getCurrentFolder(currentWindow, folderContent, event);
+});
+
+ipcMain.on("get-file", (event, data) => {
+  readFile(data, event);
+  currentFilePath = data;
 });
 
 ipcMain.on("save", (event, data) => {

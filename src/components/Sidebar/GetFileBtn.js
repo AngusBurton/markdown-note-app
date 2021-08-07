@@ -10,7 +10,7 @@ const GetFileBtn = () => {
   return (
     <button
       onClick={() => {
-        ipcRenderer.send("get-file", "poopies");
+        ipcRenderer.send("get-folder", "poopies");
       }}
     >
       Open Dialog to Select a file
