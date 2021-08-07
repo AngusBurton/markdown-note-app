@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Editor from "./components/Editor";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 const { ipcRenderer } = window.require("electron");
 

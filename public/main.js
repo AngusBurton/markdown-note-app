@@ -6,13 +6,12 @@ const isDev = require("electron-is-dev");
 require("@electron/remote/main").initialize();
 
 const fs = require("fs");
-const { resolve } = require("path");
 
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    width: 1280,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInSubFrames: true,
@@ -67,7 +66,8 @@ function getCurrentFile(win) {
         console.log(result.canceled);
       } else {
         currentFilePath = result.filePaths[0];
-        openFile(currentFilePath, arguments[2]);
+        // Calling openfile on init when no file is selected ***need to fix
+        readFile(currentFilePath, arguments[2]);
       }
     })
     .catch((err) => {
@@ -75,7 +75,7 @@ function getCurrentFile(win) {
     });
 }
 
-function openFile(path, e) {
+function readFile(path, e) {
   fs.readFile(path, "utf8", (err, data) => {
     if (err) {
       console.error(err);
@@ -86,14 +86,20 @@ function openFile(path, e) {
   });
 }
 
-ipcMain.on("file", (event, data) => {
-  getCurrentFile(currentWindow, openFile, event);
+ipcMain.on("get-file", (event, data) => {
+  getCurrentFile(currentWindow, readFile, event);
 });
 
 ipcMain.on("save", (event, data) => {
-  console.log("saved - " + currentFilePath);
-  // fs.writeFile(, data, function (err) {
-  //   if (err) return console.log(err);
-  //   console.log("hit");
-  // });
+  // Auto saves current file based on 2.5 sec timer based on when user types.
+  if (currentFilePath === "") {
+    return;
+  } else {
+    fs.writeFile(currentFilePath, data, function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    });
+  }
 });

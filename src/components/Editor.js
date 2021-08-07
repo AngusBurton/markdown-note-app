@@ -9,15 +9,15 @@ const { ipcRenderer } = window.require("electron");
 export default function Editor(props) {
   const { language, value, onChange } = props;
 
-  const [userFile, setFileSave] = useState("");
+  const [saveFile, setFileSave] = useState("");
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      ipcRenderer.send("save", true);
+      ipcRenderer.send("save", saveFile);
     }, 2500);
 
     return () => clearTimeout(delayDebounce);
-  }, [userFile]);
+  }, [saveFile]);
 
   function handleChange(editor, data, value) {
     onChange(value);
