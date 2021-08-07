@@ -1,0 +1,21 @@
+.treeFile {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  cursor: pointer;
+}
+
+.treeFile:hover {
+  background-color: rgba(255, 0, 0, 0.274);
+}
+
+.treeFolder:hover {
+  background-color: rgba(255, 0, 0, 0.274);
+}
+
+.treeFolder {
+  background-color: transparent;
+  border: 1px solid rgb(252, 181, 100);
+  color: white;
+  cursor: pointer;
+}

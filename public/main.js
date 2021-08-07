@@ -53,13 +53,13 @@ let currentFilePath = "";
 function getCurrentFile(win) {
   dialog
     .showOpenDialog(win, {
-      properties: ["openFile"],
-      filters: [
-        {
-          name: "Markdown",
-          extensions: ["md", "markdown", "txt"],
-        },
-      ],
+      properties: ["openDirectory"],
+      // filters: [
+      //   {
+      //     name: "Markdown",
+      //     extensions: ["md", "markdown", "txt"],
+      //   },
+      // ],
     })
     .then((result) => {
       if (result.canceled) {
@@ -67,12 +67,22 @@ function getCurrentFile(win) {
       } else {
         currentFilePath = result.filePaths[0];
         // Calling openfile on init when no file is selected ***need to fix
-        readFile(currentFilePath, arguments[2]);
+        // readFile(currentFilePath, arguments[2]);
+        folderContent(currentFilePath, arguments[2]);
       }
     })
     .catch((err) => {
       console.log(err);
     });
+}
+
+const dirTree = require("directory-tree");
+
+function folderContent(path, e) {
+  const filteredTree = dirTree(path, {
+    extensions: /\.(md|txt)$/,
+  });
+  e.reply("tree", filteredTree);
 }
 
 function readFile(path, e) {
@@ -87,7 +97,8 @@ function readFile(path, e) {
 }
 
 ipcMain.on("get-file", (event, data) => {
-  getCurrentFile(currentWindow, readFile, event);
+  // getCurrentFile(currentWindow, readFile, event);
+  getCurrentFile(currentWindow, folderContent, event);
 });
 
 ipcMain.on("save", (event, data) => {
