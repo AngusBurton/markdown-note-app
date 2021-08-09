@@ -7,7 +7,7 @@ import "codemirror/mode/markdown/markdown";
 const { ipcRenderer } = window.require("electron");
 
 export default function Editor(props) {
-  const { language, value, onChange } = props;
+  const { language, value, onChange, setMarkdown } = props;
 
   const [saveFile, setFileSave] = useState("");
 
@@ -21,6 +21,7 @@ export default function Editor(props) {
 
   function handleChange(editor, data, value) {
     onChange(value);
+    setMarkdown(value);
     setFileSave(value);
   }
   return (
@@ -29,6 +30,7 @@ export default function Editor(props) {
         onBeforeChange={handleChange}
         value={value}
         className="code-mirror-wrapper"
+        lineWrapping={true}
         options={{
           lineWrapping: true,
           lint: true,
