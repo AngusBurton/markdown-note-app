@@ -1,26 +1,21 @@
-import { React, useState } from "react";
+import { React } from "react";
 import TreeFile from "./TreeFile";
 import TreeFolder from "./TreeFolder";
+import styles from "../../../styles/tree.module.css";
 
-const { ipcRenderer } = window.require("electron");
-
-export default function TreeList() {
-  const [treeList, setTreeList] = useState([]);
-
-  ipcRenderer.on("tree", (event, data) => {
-    // receive folder contents
-    let tree = data.children;
-
-    setTreeList(tree);
-  });
-
+export default function TreeList(props) {
   return (
-    <div>
-      {treeList.map((item, index) =>
+    <div className={styles.treeList}>
+      {props.tree.map((item, index) =>
         item.type === "file" ? (
           <TreeFile key={index} name={item.name} path={item.path} />
         ) : (
-          <TreeFolder key={index} name={item.name} />
+          <TreeFolder
+            key={index}
+            name={item.name}
+            contents={item.children}
+            path={item.path}
+          />
         )
       )}
     </div>

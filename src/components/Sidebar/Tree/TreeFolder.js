@@ -1,10 +1,44 @@
-import React from "react";
-import styles from "../../../styles/treeItem.module.css";
+import { React, useState } from "react";
+import styles from "../../../styles/tree.module.css";
+import TreeList from "./TreeList";
+
+const { ipcRenderer } = window.require("electron");
 
 export default function TreeFolder(props) {
+  const [folderToggle, setFolderToggle] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
+  ipcRenderer.on("active", (event, data) => {
+    props.path === data ? setIsActive(true) : setIsActive(false);
+  });
+
   return (
     <div>
-      <button className={styles.treeFolder}>Folder: {props.name}</button>
+      <button
+        className={`${styles.treeFolder} ${isActive ? styles.active : ""}`}
+        onClick={() => {
+          ipcRenderer.send("active-item", props.path);
+          if (props.contents.length === 0) {
+            setFolderToggle(false);
+          } else {
+            if (folderToggle === true) {
+              setFolderToggle(false);
+            } else {
+              setFolderToggle(true);
+            }
+          }
+        }}
+      >
+        Folder: {props.name}
+      </button>
+      <button
+        onClick={() => {
+          ipcRenderer.send("delete", props.path);
+        }}
+      >
+        DELETE
+      </button>
+      {folderToggle === true ? <TreeList tree={props.contents} /> : null}
     </div>
   );
 }
