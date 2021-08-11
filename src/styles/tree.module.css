@@ -1,8 +1,11 @@
 .treeFile {
   background-color: transparent;
-  border: 1px solid white;
+  /* border: 1px solid white; */
+  border: none;
   color: white;
   cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
 
 .treeFile:hover {
@@ -15,7 +18,7 @@
 
 .treeFolder {
   background-color: transparent;
-  border: 1px solid rgb(252, 181, 100);
+  /* border: 1px solid rgb(252, 181, 100); */
   color: white;
   cursor: pointer;
 }
@@ -26,8 +29,21 @@
 }
 
 .active {
-  background-color: rgba(255, 255, 255, 0.24);
+  /* background-color: rgba(255, 255, 255, 0.171); */
+  color: rgb(110, 255, 91);
+  text-shadow: 0 0 3px #428f23;
 }
-/* .isFolder {
-  justify-content: space-around;
-} */
+
+.isFolder {
+  background-color: rgba(42, 42, 46, 0.521);
+  align-items: flex-start;
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid white;
+  width: inherit;
+}
+
+.folderWrapper {
+  width: 100%;
+  height: 100%;
+}

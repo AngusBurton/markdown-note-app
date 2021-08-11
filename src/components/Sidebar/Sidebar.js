@@ -21,6 +21,7 @@ export default function Sidebar() {
       <NewFileBtn />
       <DeleteBtn />
       <TreeList tree={treeList} />
+      <div className={"free-tree-space"}></div>
     </div>
   );
 }

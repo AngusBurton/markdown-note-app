@@ -27,3 +27,8 @@ body {
   height: inherit;
   height: inherit;
 }
+
+.free-tree-space {
+  width: auto;
+  height: auto;
+}

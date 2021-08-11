@@ -18,7 +18,7 @@ export default function TreeFile(props) {
         ipcRenderer.send("active-item", props.path);
       }}
     >
-      File: {props.name}
+      {props.name}
     </button>
   );
 }
