@@ -5,7 +5,10 @@ import styles from "../../../styles/tree.module.css";
 
 export default function TreeList(props) {
   return (
-    <div className={styles.treeList}>
+    <div
+      // Fix isFolderprop
+      className={`${styles.treeList} ${props.isFolder ? styles.isFolder : ""}`}
+    >
       {props.tree.map((item, index) =>
         item.type === "file" ? (
           <TreeFile key={index} name={item.name} path={item.path} />

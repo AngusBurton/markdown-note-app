@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import styles from "../../../styles/tree.module.css";
-import DeleteBtn from "../DeleteBtn";
 
 const { ipcRenderer } = window.require("electron");
 
@@ -12,17 +11,14 @@ export default function TreeFile(props) {
   });
 
   return (
-    <div>
-      <button
-        className={`${styles.treeFile} ${isActive ? styles.active : ""}`}
-        onClick={() => {
-          ipcRenderer.send("get-file", props.path);
-          ipcRenderer.send("active-item", props.path);
-        }}
-      >
-        File: {props.name}
-      </button>
-      <DeleteBtn path={props.path} />
-    </div>
+    <button
+      className={`${styles.treeFile} ${isActive ? styles.active : ""}`}
+      onClick={() => {
+        ipcRenderer.send("get-file", props.path);
+        ipcRenderer.send("active-item", props.path);
+      }}
+    >
+      File: {props.name}
+    </button>
   );
 }

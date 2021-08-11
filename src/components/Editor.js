@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useRef } from "react";
 import { Controlled as ControlledEditor } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
@@ -7,15 +7,13 @@ import "codemirror/mode/markdown/markdown";
 const { ipcRenderer } = window.require("electron");
 
 export default function Editor(props) {
-  const { language, value, onChange, setMarkdown } = props;
-
+  const { language, value, onChange, setMarkdown, editingPath } = props;
   const [saveFile, setFileSave] = useState("");
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      ipcRenderer.send("save", saveFile);
+      ipcRenderer.send("save", [saveFile, editingPath]);
     }, 2500);
-
     return () => clearTimeout(delayDebounce);
   }, [saveFile]);
 

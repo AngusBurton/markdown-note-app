@@ -1,11 +1,11 @@
 import React from "react";
 const { ipcRenderer } = window.require("electron");
 
-export default function DeleteBtn(props) {
+export default function DeleteBtn() {
   return (
     <button
       onClick={() => {
-        ipcRenderer.send("delete", props.path);
+        ipcRenderer.send("delete", "i like turtles");
       }}
     >
       [x]

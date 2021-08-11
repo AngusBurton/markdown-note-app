@@ -8,10 +8,12 @@ const { ipcRenderer } = window.require("electron");
 function App() {
   const [text, setText] = useState("");
   const [markdown, setMarkdown] = useState("");
+  const [editingPath, setEditingPath] = useState("");
 
   ipcRenderer.on("reply", (event, data) => {
-    setText(data);
-    setMarkdown(data);
+    setText(data[0]);
+    setMarkdown(data[0]);
+    setEditingPath(data[1]);
   });
   return (
     <div className="App">
@@ -21,6 +23,7 @@ function App() {
         value={text}
         onChange={setText}
         setMarkdown={setMarkdown}
+        editingPath={editingPath}
       />
       <MarkdownParser markdown={markdown} />
     </div>

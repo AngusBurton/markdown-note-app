@@ -88,7 +88,7 @@ function readFile(path, e) {
       return;
     }
     // Send text from file back to editor
-    e.reply("reply", data);
+    e.reply("reply", [data, path]);
   });
 }
 
@@ -184,61 +184,64 @@ ipcMain.on("new-folder", (event, data) => {
 
 ipcMain.on("save", (event, data) => {
   // Auto saves current file based on 2.5 sec timer based on when user types.
-  if (currentFilePath === "") {
+  if (data[1] === "" || currentFilePath == "") {
     return;
   } else {
-    fs.writeFile(currentFilePath, data, function (err) {
+    fs.writeFile(data[1], data[0], function (err) {
       if (err) {
         return console.log(err);
       }
-      console.log("The file was saved!");
+      console.log("File: " + data[1] + " was saved!");
     });
   }
 });
 
 ipcMain.on("delete", (event, data) => {
   // define options
-  const options = {
-    type: "question",
-    buttons: ["Cancel", "Yes"],
-    defaultId: 2,
-    title: "Question",
-    message: "Are you sure you want to delete this file?",
-  };
-  dialog.showMessageBox(currentWindow, options).then((res) => {
-    console.log(res.response);
-    if (res.response === 1) {
-      // yes delete
-      fs.lstat(data, (err, stats) => {
-        if (err) {
-          console.log(err);
-        } else {
-          if (stats.isDirectory()) {
-            //delete folder
-            fs.rmdir(data, { recursive: true }, (err) => {
-              if (err) {
-                throw err;
-              }
-              buildTree(mainFolder, event);
-              console.log(`${data} is deleted!`);
-            });
+  if (currentSelected === "") {
+    return;
+  } else {
+    const options = {
+      type: "question",
+      buttons: ["Cancel", "Yes"],
+      defaultId: 2,
+      title: "Question",
+      message: "Are you sure you want to delete this file?",
+    };
+    dialog.showMessageBox(currentWindow, options).then((res) => {
+      if (res.response === 1) {
+        // yes delete
+        fs.lstat(currentSelected, (err, stats) => {
+          if (err) {
+            console.log(err);
           } else {
-            // delete file
-            fs.unlink(data, (err) => {
-              if (err) {
-                console.error(err);
-                return;
-              }
-              buildTree(mainFolder, event);
-            });
+            if (stats.isDirectory()) {
+              //delete folder
+              fs.rmdir(currentSelected, { recursive: true }, (err) => {
+                if (err) {
+                  throw err;
+                }
+                buildTree(mainFolder, event);
+                console.log(`${currentSelected} is deleted!`);
+              });
+            } else {
+              // delete file
+              fs.unlink(currentSelected, (err) => {
+                if (err) {
+                  console.error(err);
+                  return;
+                }
+                buildTree(mainFolder, event);
+              });
+            }
           }
-        }
-      });
-    } else {
-      // no don't delete
-      return;
-    }
-  });
+        });
+      } else {
+        // no don't delete
+        return;
+      }
+    });
+  }
 });
 
 // mkdir

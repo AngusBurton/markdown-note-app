@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  font-size: 16px;
 }
 
 .sidebar {
@@ -12,14 +11,6 @@ body {
 .editor-container {
   width: 45vw;
   height: 100vh;
-}
-
-.markdownParser {
-  width: 45vw;
-  height: 100vh;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  word-break: normal;
 }
 
 .App {

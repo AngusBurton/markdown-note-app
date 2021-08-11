@@ -1,4 +1,5 @@
 import { React, useState } from "react";
+import DeleteBtn from "./DeleteBtn";
 import GetFolderBtn from "./GetFolderBtn";
 import NewFileBtn from "./NewFileBtn";
 import TreeList from "./Tree/TreeList";
@@ -18,6 +19,7 @@ export default function Sidebar() {
     <div className="sidebar">
       <GetFolderBtn />
       <NewFileBtn />
+      <DeleteBtn />
       <TreeList tree={treeList} />
     </div>
   );

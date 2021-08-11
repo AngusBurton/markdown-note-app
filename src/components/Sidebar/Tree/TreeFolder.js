@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import styles from "../../../styles/tree.module.css";
-import DeleteBtn from "../DeleteBtn";
 import TreeList from "./TreeList";
 
 const { ipcRenderer } = window.require("electron");
@@ -32,8 +31,10 @@ export default function TreeFolder(props) {
       >
         Folder: {props.name}
       </button>
-      <DeleteBtn path={props.path} />
-      {folderToggle === true ? <TreeList tree={props.contents} /> : null}
+      {folderToggle === true ? (
+        // fix isFolder prop
+        <TreeList tree={props.contents} isFolder={folderToggle} />
+      ) : null}
     </div>
   );
 }
