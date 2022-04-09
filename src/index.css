@@ -2,6 +2,24 @@ body {
   margin: 0;
 }
 
+button {
+  display: inline-block;
+  outline: 0;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 4px;
+  font-size: 13px;
+  height: 30px;
+  background-color: #bebebe0d;
+  color: #ffffff;
+  padding: 0 10px;
+}
+
+button:hover {
+  background-color: #0000001a;
+}
+
 .sidebar {
   width: 10vw;
   height: 100vh;
@@ -31,4 +49,10 @@ body {
 .free-tree-space {
   width: auto;
   height: auto;
+}
+
+.currentFile {
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #333333;
 }
