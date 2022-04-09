@@ -7,3 +7,6 @@ I got the idea for this project by doing my own note taking for uni and realsing
 ### `yarn electron:serve`
 
 Runs the app, an electron window should pop up on your desktop.
+
+## Demo
+![demo](https://user-images.githubusercontent.com/43803141/162560013-b420b03c-f06c-4972-b205-bd92b216d5ac.gif)
